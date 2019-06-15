@@ -1,6 +1,5 @@
 import React from 'react';
-import AppBar from '@material-ui/core/AppBar';
-import { Toolbar, IconButton, Typography } from '@material-ui/core';
+import { Toolbar, IconButton, Typography, AppBar } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 
 const nav = (props) => {
