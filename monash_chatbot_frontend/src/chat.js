@@ -26,10 +26,16 @@ const useStyles = makeStyles((theme) => {
     };
 });
 
+/**
+ * Creates the chat message based
+ * @param {array} props.chatHistory
+ * 
+ */
 const Chat = (props) => {
     const classes = useStyles();
     const chat = props.chatHistory.map((message) => {
-        const side = (message.from === 'bot') ? clsx(classes.message, classes.left) : clsx(classes.message, classes.right);
+        //own mesages on the left bot messages on the right
+        const side = (message.from === 'bot') ? clsx(classes.message, classes.right, message.from) : clsx(classes.message, classes.left, message.from);
         if (message.isText) {
             return (
                 <Button
@@ -40,10 +46,12 @@ const Chat = (props) => {
                 </Button>
             );
         } else {
+            //cards are a structure from the dialogflow agent
             const cards = message.message.map(({ card }) => {
-                console.log(card.imageUri);
                 return (
-                        <Card className={clsx(classes.card, classes.left)}>
+                        <Card 
+                            className={clsx(classes.card, classes.left, message.from)}
+                        >
                             <CardActionArea>
                                 <CardMedia
                                     className={classes.media}
@@ -67,8 +75,8 @@ const Chat = (props) => {
                                 </CardContent>
                             </CardActionArea>
                             <CardActions>
-                                <Button size="small" color="primary">
-                                    {console.log(card.buttons)}
+                                <Button size="small" color="primary" href={card.buttons[0].postback}>
+                                    Link
                                 </Button>
                             </CardActions>
                         </Card>
@@ -79,5 +87,6 @@ const Chat = (props) => {
     });
    return chat; 
 }
-
+/*
+*/
 export default Chat;

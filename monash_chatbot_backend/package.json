@@ -1,10 +1,13 @@
 {
-  "name": "monash_chatbot_backend",
+  "name": "monash_chatbot",
   "version": "1.0.0",
   "description": "A chatbot for an interview at the Innovation Studio of Monash University.",
   "main": "index.js",
   "author": "n-0",
   "license": "MIT",
+  "scripts": {
+    "start": "node src/index.js"
+  },
   "dependencies": {
     "cors": "^2.8.5",
     "dialogflow": "^0.10.1",

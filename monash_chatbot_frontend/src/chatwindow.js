@@ -39,7 +39,11 @@ const useStyles = makeStyles((theme) => {
         },
     };
 });
-
+/**
+ * Translates http response into chat messages 
+ * @param {object} response 
+ * @param {boolean} fromBot 
+ */
 const addHistory = (response, fromBot) => {
     if (!fromBot) {
         return {
@@ -72,6 +76,7 @@ const ChatWindow = (props) => {
     const classes = useStyles();
     const [text, setText] = useState('');
     const [sending, setSending] = useState(false);
+    //start message so user can send otherwise sendMessage triggers not
     const [chatHistory, setChatHistory] = useState([{
         message: 'Hello I am a chatbot',
         time: Date.now(),
@@ -79,17 +84,18 @@ const ChatWindow = (props) => {
         isText: true,
     }]);
 
+    //sends message to dialogflow and updates state accordingly
     useEffect(() => {
         if (text !== '' && sending === true) {
             sendToBot(text, sessionId).then((response) => {
-            const history = addHistory(response, true);
-            if (response.data.sessionId) {
-                sessionId = response.data.sessionId;
-            }
-            const updatedChat = [...chatHistory, history];
-            setSending(false);
-            setText('');
-            setChatHistory(updatedChat);
+                const history = addHistory(response, true);
+                if (response.data.sessionId) {
+                    sessionId = response.data.sessionId;
+                }
+                const updatedChat = [...chatHistory, history];
+                setSending(false);
+                setText('');
+                setChatHistory(updatedChat);
             }).catch(e => {
                 sessionError = true;
             });
@@ -98,6 +104,7 @@ const ChatWindow = (props) => {
         }
     }, [sending, text, chatHistory]);
 
+    //messages are 1 to 1 and should not be send if an error appeares
     const sendMessage = () => {
         if (
             chatHistory.length > 0 &&

@@ -6,19 +6,23 @@ const path = require('path');
 
 const app = express();
 
-//const projectId = process.env.PROJECT_ID;
-const projectId = 'monash-agent-cayctx';
+const projectId = process.env.PROJECT_ID;
+//const projectId = 'monash-agent-cayctx';
 const port = process.env.PORT || 8080;
 
+
+//retrieve data from request and allow loopback
 app.use(express.json());
 app.use(cors());
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.resolve(path.join(__dirname, '../build'))));
 
+//send api request to dialogflow and return result
 app.post('/dialogflow', async (req, res) => {
     const sessionClient = new dialogflow.SessionsClient();
     let sessionId;
     let sessionPath;
+    //if sessionId exists continue chat otherwise create a new one
     if (req.body.sessionId) {
         sessionId = req.body.sessionId;
         sessionPath = sessionClient.sessionPath(projectId, req.body.sessionId);
@@ -42,8 +46,9 @@ app.post('/dialogflow', async (req, res) => {
     res.json(response).status(200).end();
 });
 
+//serve chat website
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  res.sendFile(path.resolve(path.join(__dirname, '../build', 'index.html')));
 });
 
 app.listen(port, () => {
