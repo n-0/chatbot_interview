@@ -50,7 +50,7 @@ const Chat = (props) => {
             const cards = message.message.map(({ card }) => {
                 return (
                         <Card 
-                            className={clsx(classes.card, classes.left, message.from)}
+                            className={side}
                         >
                             <CardActionArea>
                                 <CardMedia
